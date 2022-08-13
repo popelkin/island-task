@@ -1,0 +1,8 @@
+package com.javarush.popelo.islandtask;
+
+public class Main {
+
+    public static void main(String[] args) {
+        System.out.println('a');
+    }
+}
