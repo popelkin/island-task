@@ -1,9 +1,13 @@
-package com.javarush.popelo.islandtask.animal;
+package com.javarush.popelo.islandtask.character;
 
-import com.javarush.popelo.islandtask.interfaces.*;
-import com.javarush.popelo.islandtask.island.Character;
+import com.javarush.popelo.islandtask.behavior.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class Animal extends Character implements Move, Eat, Eatable, Multiply, Die {
+
+    protected static Map<String, Integer> eatProbability = new HashMap<>();
 
     @Override
     public void performDie() {

@@ -1,4 +1,4 @@
-package com.javarush.popelo.islandtask.interfaces;
+package com.javarush.popelo.islandtask.behavior;
 
 public interface Move {
 
