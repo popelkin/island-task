@@ -7,7 +7,18 @@ import java.util.Map;
 
 public abstract class Animal extends Character implements Move, Eat, Eatable, Multiply, Die {
 
-    protected static Map<String, Integer> eatProbability = new HashMap<>();
+    protected static Map<Class, Integer> eatProbability = new HashMap<>();
+
+    /**
+     * @return boolean
+     */
+    public boolean isHerbivorous() {
+        return this instanceof Herbivorous;
+    }
+
+    public boolean isCarnivorous() {
+        return this instanceof Carnivorous;
+    }
 
     @Override
     public void performDie() {

@@ -5,16 +5,17 @@ import com.javarush.popelo.islandtask.behavior.Herbivorous;
 import com.javarush.popelo.islandtask.character.Animal;
 import com.javarush.popelo.islandtask.character.plant.Herb;
 
-public class Duck extends Animal implements Herbivorous, Carnivorous {
+public class Boar extends Animal implements Herbivorous, Carnivorous {
 
     static {
+        eatProbability.put(Mouse.class, 50);
         eatProbability.put(Caterpillar.class, 90);
         eatProbability.put(Herb.class, 100);
 
-        weight = 1;
-        maxCountOnLocation = 200;
-        speed = 4;
-        saturation = 0.15;
+        weight = 400;
+        maxCountOnLocation = 50;
+        speed = 2;
+        saturation = 50;
     }
 
 }

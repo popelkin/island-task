@@ -8,7 +8,6 @@
                     "Carnivorous",
                     "Move",
                     "Eat",
-                    "Eatable",
                     "Multiply",
                     "Die"
                 ],
@@ -22,6 +21,12 @@
                     "Boar": 15,
                     "Buffalo": 10,
                     "Duck": 40
+                },
+                "properties": {
+                    "weight": 50,
+                    "maxCountOnLocation": 30,
+                    "speed": 3,
+                    "saturation": 8,
                 }
             }
         }

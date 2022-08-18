@@ -1,12 +1,10 @@
 package com.javarush.popelo.islandtask.island;
 
-import java.time.LocalDate;
-
 public class Island {
-    private int width;
-    private int height;
+    private final int width;
+    private final int height;
 
-    private Location[][] locations;
+    private final Location[][] locations;
 
     /**
      * @param width
@@ -22,14 +20,14 @@ public class Island {
     /**
      *
      */
-    public void fillWithLocations() {
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                Location location = new Location();
+    public void createLocations() {
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                Location location = new Location(x, y);
 
-                location.fillWithCharacters();
+                location.createCharacters();
 
-                locations[i][j] = location;
+                locations[x][y] = location;
             }
         }
     }

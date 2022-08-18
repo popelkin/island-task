@@ -1,28 +1,45 @@
 package com.javarush.popelo.islandtask.island;
 
+import com.javarush.popelo.islandtask.character.Animal;
 import com.javarush.popelo.islandtask.character.Character;
+import com.javarush.popelo.islandtask.character.Plant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Location {
+    private int x;
+    private int y;
 
-    private Map<String, ArrayList<Character>> characters = new HashMap<>();
+    private Map<Class, ArrayList<Character>> characters = new HashMap<>();
 
-    public Location() {
-
+    public Location(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
 
-    public void fillWithCharacters() {
-        Map<String, Class> animals = Character.getAnimals();
-        ArrayList<Character> animalsList = new ArrayList<>();
-        animals.forEach((k, v) -> animalsList.add(createCharacter(v)));
-        characters.put("Animals", animalsList);
+    public int[] getCoordinates() {
+        return new int[]{this.x, this.y};
+    }
 
-        Map<String, Class> plants = Character.getPlants();
+    public void createCharacters() {
+        Map<Class<Animal>, Class<Animal>> animals = Character.getCharacters(Character.ANIMAL_PACKAGE);
+        ArrayList<Character> animalsList = new ArrayList<>();
+        animals.forEach((k, v) -> {
+            Character character = createCharacter(v);
+            character.setLocation(this);
+            animalsList.add(character);
+        });
+        characters.put(Animal.class, animalsList);
+
+        Map<Class<Plant>, Class<Plant>> plants = Character.getCharacters(Character.PLANT_PACKAGE);
         ArrayList<Character> plantsList = new ArrayList<>();
-        plants.forEach((k, v) -> plantsList.add(createCharacter(v)));
-        characters.put("Plants", plantsList);
+        plants.forEach((k, v) -> {
+            Character character = createCharacter(v);
+            character.setLocation(this);
+            plantsList.add(character);
+        });
+        characters.put(Plant.class, plantsList);
     }
 
     /**
