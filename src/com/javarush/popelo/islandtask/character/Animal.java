@@ -1,13 +1,14 @@
 package com.javarush.popelo.islandtask.character;
 
 import com.javarush.popelo.islandtask.behavior.*;
+import com.javarush.popelo.islandtask.service.RandomizerService;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public abstract class Animal extends Character implements Move, Eat, Eatable, Multiply, Die {
 
-    protected static Map<Class, Integer> eatProbability = new HashMap<>();
+    protected Map<Class<? extends Character>, Integer> eatProbability = new HashMap<>();
 
     /**
      * @return boolean
@@ -37,11 +38,18 @@ public abstract class Animal extends Character implements Move, Eat, Eatable, Mu
 
     @Override
     public void performMove() {
-        System.out.println("Move");
+        int steps = RandomizerService.getRandomInt(speed);
+        System.out.println(steps);
+        for (int i = 0; i < speed; i++) {
+
+        }
     }
 
     @Override
     public void performMultiply() {
         System.out.println("Multiply");
     }
+
+
+
 }

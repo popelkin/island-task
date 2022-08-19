@@ -5,7 +5,7 @@ import com.javarush.popelo.islandtask.character.Animal;
 
 public class Wolf extends Animal implements Carnivorous {
 
-    static {
+     {
         eatProbability.put(Horse.class, 10);
         eatProbability.put(Deer.class, 15);
         eatProbability.put(Rabbit.class, 60);

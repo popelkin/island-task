@@ -2,16 +2,14 @@ package com.javarush.popelo.islandtask.island;
 
 import com.javarush.popelo.islandtask.character.Animal;
 import com.javarush.popelo.islandtask.character.Character;
-import com.javarush.popelo.islandtask.character.Plant;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+
+import java.util.*;
 
 public class Location {
     private int x;
     private int y;
 
-    private Map<Class, ArrayList<Character>> characters = new HashMap<>();
+    private Map<Class<? extends Character>, ArrayList<? extends Character>> characters = new HashMap<>();
 
     public Location(int x, int y) {
         this.x = x;
@@ -23,32 +21,37 @@ public class Location {
     }
 
     public void createCharacters() {
-        Map<Class<Animal>, Class<Animal>> animals = Character.getCharacters(Character.ANIMAL_PACKAGE);
-        ArrayList<Character> animalsList = new ArrayList<>();
-        animals.forEach((k, v) -> {
-            Character character = createCharacter(v);
-            character.setLocation(this);
-            animalsList.add(character);
+        Set<Class<Animal>> animals = Character.getCharacterClasses(Character.ANIMAL_PACKAGE);
+
+        ArrayList<Animal> animalsList = new ArrayList<>();
+        animals.forEach(v -> {
+            Animal animal = createCharacterInstance(v);
+            animal.setLocation(this);
+            animalsList.add(animal);
+
+            System.out.println(animal);
+            System.out.println("*************************");
         });
         characters.put(Animal.class, animalsList);
-
-        Map<Class<Plant>, Class<Plant>> plants = Character.getCharacters(Character.PLANT_PACKAGE);
+        System.out.println("aaa");
+        /*Map<Class<Plant>, Class<Plant>> plants = Character.getCharacterClasses(Character.PLANT_PACKAGE);
         ArrayList<Character> plantsList = new ArrayList<>();
         plants.forEach((k, v) -> {
-            Character character = createCharacter(v);
+            Character character = createCharacterInstance(v);
             character.setLocation(this);
             plantsList.add(character);
         });
-        characters.put(Plant.class, plantsList);
+        characters.put(Plant.class, plantsList);*/
     }
 
     /**
      * @param clazz
      * @return
+     * @param <T>
      */
-    private Character createCharacter(Class clazz) {
+    private <T> T createCharacterInstance(Class<T> clazz) {
         try {
-            return (Character) clazz.getDeclaredConstructor().newInstance();
+            return clazz.getDeclaredConstructor().newInstance();
 
         } catch (Exception ex) {
             throw new RuntimeException("Exception: " + ex.getMessage());

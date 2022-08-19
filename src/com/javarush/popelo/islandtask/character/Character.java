@@ -2,13 +2,15 @@ package com.javarush.popelo.islandtask.character;
 
 import com.javarush.popelo.islandtask.island.Location;
 import com.javarush.popelo.islandtask.service.ClassService;
-import java.util.Map;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public abstract class Character {
-    protected static double weight;
-    protected static int maxCountOnLocation;
-    protected static int speed;
-    protected static double saturation;
+    protected double weight;
+    protected int maxCountOnLocation;
+    protected int speed;
+    protected double saturation;
     private Location location;
 
     public static final String ANIMAL_PACKAGE = "com.javarush.popelo.islandtask.character.animal";
@@ -17,8 +19,10 @@ public abstract class Character {
     /**
      * @return Map
      */
-    public static <T extends Character> Map<Class<T>, Class<T>> getCharacters(String pack) {
-        return ClassService.getImplementedClasses(pack);
+    public static <T extends Character> Set<Class<T>> getCharacterClasses(String pack) {
+        return ClassService.getImplementedClasses(pack).stream()
+                .map(e -> (Class<T>) e)
+                .collect(Collectors.toSet());
     }
 
     public Location getLocation() {
@@ -29,4 +33,30 @@ public abstract class Character {
         this.location = location;
     }
 
+    public double getWeight() {
+        return weight;
+    }
+
+    public int getMaxCountOnLocation() {
+        return maxCountOnLocation;
+    }
+
+    public int getSpeed() {
+        return speed;
+    }
+
+    public double getSaturation() {
+        return saturation;
+    }
+
+    @Override
+    public String toString() {
+        return "Character{" +
+                "weight=" + weight +
+                ", maxCountOnLocation=" + maxCountOnLocation +
+                ", speed=" + speed +
+                ", saturation=" + saturation +
+                ", location=" + location +
+                '}';
+    }
 }

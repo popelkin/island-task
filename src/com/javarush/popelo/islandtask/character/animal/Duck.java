@@ -7,7 +7,7 @@ import com.javarush.popelo.islandtask.character.plant.Herb;
 
 public class Duck extends Animal implements Herbivorous, Carnivorous {
 
-    static {
+     {
         eatProbability.put(Caterpillar.class, 90);
         eatProbability.put(Herb.class, 100);
 
