@@ -1,10 +1,13 @@
 package com.javarush.popelo.islandtask.island;
 
+import com.javarush.popelo.islandtask.service.CharacterService;
+import com.javarush.popelo.islandtask.service.LocationService;
+
 public class Island {
     private final int width;
     private final int height;
 
-    private final Location[][] locations;
+    private Location[][] locations;
 
     /**
      * @param width
@@ -17,19 +20,28 @@ public class Island {
         locations = new Location[width][height];
     }
 
-    /**
-     *
-     */
+    public Location[][] getLocations() {
+        return locations;
+    }
+
+    public void setLocations(Location[][] locations) {
+        this.locations = locations;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
     public void createLocations() {
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                Location location = new Location(x, y);
+        LocationService.createLocations(this);
+    }
 
-                location.createCharacters();
-
-                locations[x][y] = location;
-            }
-        }
+    public void performCharactersMove() {
+        CharacterService.performCharactersMove(this);
     }
 
 }

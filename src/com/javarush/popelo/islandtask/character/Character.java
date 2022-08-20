@@ -1,5 +1,6 @@
 package com.javarush.popelo.islandtask.character;
 
+import com.javarush.popelo.islandtask.island.Island;
 import com.javarush.popelo.islandtask.island.Location;
 import com.javarush.popelo.islandtask.service.ClassService;
 
@@ -27,6 +28,10 @@ public abstract class Character {
 
     public Location getLocation() {
         return location;
+    }
+
+    public Island getIsland() {
+        return this.getLocation().getIsland();
     }
 
     public void setLocation(Location location) {

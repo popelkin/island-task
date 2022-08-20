@@ -16,8 +16,17 @@ public class RandomizerService {
             throw new RuntimeException(e);
         }
     }
-    public static int getRandomInt(int value) {
-        return random.nextInt(value + 1);
+
+    private RandomizerService() {
+        throw new IllegalStateException("Utility class");
+    }
+    public static int getRandomInt(int max) {
+        return random.nextInt(max + 1);
+    }
+
+    public static int getRandomInt(int min, int max) {
+        max += 1;
+        return random.nextInt(max - min) + min;
     }
 
 }
