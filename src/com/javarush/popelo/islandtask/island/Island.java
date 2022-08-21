@@ -1,6 +1,7 @@
 package com.javarush.popelo.islandtask.island;
 
 import com.javarush.popelo.islandtask.service.CharacterService;
+import com.javarush.popelo.islandtask.service.IslandService;
 import com.javarush.popelo.islandtask.service.LocationService;
 
 public class Island {
@@ -42,6 +43,10 @@ public class Island {
 
     public void performCharactersMove() {
         CharacterService.performCharactersMove(this);
+    }
+
+    public String getStatistic() {
+        return IslandService.getStatistic(this);
     }
 
 }

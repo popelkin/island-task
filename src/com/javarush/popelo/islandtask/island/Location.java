@@ -4,6 +4,7 @@ import com.javarush.popelo.islandtask.character.Animal;
 import com.javarush.popelo.islandtask.character.Character;
 import com.javarush.popelo.islandtask.character.Plant;
 import com.javarush.popelo.islandtask.exception.BaseException;
+import com.javarush.popelo.islandtask.service.LocationService;
 import com.javarush.popelo.islandtask.service.RandomizerService;
 
 import java.util.*;
@@ -13,21 +14,21 @@ public class Location {
     private int y;
     private Island island;
 
-    private Map<String, Map<String, ArrayList>> characters = new HashMap<>();
+    private final Map<String, Map<String, ArrayList>> characters = new HashMap<>();
+    private final Map<String, Map<String, Map<String, Integer>>> statistic = new HashMap<>();
+
+    public static final String STATISTIC_START_COUNT = "Start quantity";
+    public static final String STATISTIC_DIE = "Died count";
+    public static final String STATISTIC_EAT = "Ate count";
+    public static final String STATISTIC_LEFT = "Left count";
+    public static final String STATISTIC_ARRIVED = "Arrived count";
+    public static final String STATISTIC_MULTIPLY = "Multiply count";
+    public static final String STATISTIC_FINAL_COUNT = "Final quantity";
 
     public Location(Island island, int x, int y) {
         this.island = island;
         this.x = x;
         this.y = y;
-    }
-
-    public Location(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    public void setIsland(Island island) {
-        this.island = island;
     }
 
     public int getCoordinateX() {
@@ -90,6 +91,34 @@ public class Location {
         });
         characters.put("Plant", plantsMap);
         ///
+
+        initStatistic();
+    }
+
+    private void initStatistic() {
+        this.characters.forEach((type, list) -> {
+            list.forEach((name, list2) -> {
+                if (!this.statistic.containsKey(type)) {
+                    this.statistic.put(type, new HashMap<>());
+                }
+
+                if (!this.statistic.get(type).containsKey(name)) {
+                    this.statistic.get(type).put(name, new HashMap<>(){{
+                        put(STATISTIC_START_COUNT, list2.size());
+                        put(STATISTIC_DIE, 0);
+                        put(STATISTIC_EAT, 0);
+                        put(STATISTIC_ARRIVED, 0);
+                        put(STATISTIC_LEFT, 0);
+                        put(STATISTIC_MULTIPLY, 0);
+                        put(STATISTIC_FINAL_COUNT, 0);
+                    }});
+                }
+            });
+        });
+    }
+
+    public Map<String, Map<String, Map<String, Integer>>> getStatistic() {
+        return this.statistic;
     }
 
     /**
@@ -112,6 +141,10 @@ public class Location {
 
     public int[] getCoordinates() {
         return new int[]{this.x, this.y};
+    }
+
+    public String getStatistic(Location location) {
+        return LocationService.getStatistic(location);
     }
 
 }

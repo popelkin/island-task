@@ -10,6 +10,9 @@ public class Main {
         island.createLocations();
         island.performCharactersMove();
 
+        System.out.println(island.getStatistic());
+
+
         System.out.println("Finish");
     }
 }

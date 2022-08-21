@@ -6,10 +6,7 @@ import com.javarush.popelo.islandtask.exception.BaseException;
 import com.javarush.popelo.islandtask.island.Island;
 import com.javarush.popelo.islandtask.island.Location;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
-import java.util.Map;
 
 import static com.javarush.popelo.islandtask.service.RandomizerService.getRandomInt;
 
@@ -67,7 +64,7 @@ public class CharacterService {
         return LocationService.getLocationByCoordinates(island, x, y);
     }
 
-    public static boolean canMoveToLocation(Character character, Location destination) {
+    public static boolean validateMoveToNewLocation(Character character, Location destination) {
         int maxCountOnLocation = character.getMaxCountOnLocation();
         int count = getCharacterCountOnLocation(character, destination);
 
@@ -88,7 +85,7 @@ public class CharacterService {
 
     public static boolean changeCharacterLocation(Character character, Location location) {
         try {
-            canMoveToLocation(character, location);
+            validateMoveToNewLocation(character, location);
 
         } catch (BaseException ex) {
             System.out.println(character.getName() + " couldn't move between locations: " + Arrays.toString(character.getLocation().getCoordinates())
