@@ -5,11 +5,11 @@ import com.javarush.popelo.islandtask.character.Animal;
 
 public class Eagle extends Animal implements Carnivorous {
 
-     {
-        eatProbability.put(Fox.class, 10);
-        eatProbability.put(Rabbit.class, 90);
-        eatProbability.put(Mouse.class, 90);
-        eatProbability.put(Duck.class, 80);
+    public Eagle() {
+        eatProbability.put("Fox", 10);
+        eatProbability.put("Rabbit", 90);
+        eatProbability.put("Mouse", 90);
+        eatProbability.put("Duck", 80);
 
         weight = 6;
         maxCountOnLocation = 20;

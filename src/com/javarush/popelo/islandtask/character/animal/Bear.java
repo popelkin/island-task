@@ -6,16 +6,16 @@ import com.javarush.popelo.islandtask.character.Animal;
 public class Bear extends Animal implements Carnivorous {
 
     public Bear() {
-        eatProbability.put(Boa.class, 80);
-        eatProbability.put(Horse.class, 40);
-        eatProbability.put(Deer.class, 80);
-        eatProbability.put(Rabbit.class, 80);
-        eatProbability.put(Mouse.class, 90);
-        eatProbability.put(Goat.class, 70);
-        eatProbability.put(Sheep.class, 70);
-        eatProbability.put(Boar.class, 50);
-        eatProbability.put(Buffalo.class, 20);
-        eatProbability.put(Duck.class, 10);
+        eatProbability.put("Boa", 80);
+        eatProbability.put("Horse", 40);
+        eatProbability.put("Deer", 80);
+        eatProbability.put("Rabbit", 80);
+        eatProbability.put("Mouse", 90);
+        eatProbability.put("Goat", 70);
+        eatProbability.put("Sheep", 70);
+        eatProbability.put("Boar", 50);
+        eatProbability.put("Buffalo", 20);
+        eatProbability.put("Duck", 10);
 
         weight = 500;
         maxCountOnLocation = 5;

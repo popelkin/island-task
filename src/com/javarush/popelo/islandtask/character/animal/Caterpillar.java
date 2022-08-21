@@ -6,8 +6,8 @@ import com.javarush.popelo.islandtask.character.plant.Herb;
 
 public class Caterpillar extends Animal implements Herbivorous {
 
-     {
-        eatProbability.put(Herb.class, 100);
+    public Caterpillar() {
+        eatProbability.put("Herb", 100);
 
         weight = 0.01;
         maxCountOnLocation = 1000;

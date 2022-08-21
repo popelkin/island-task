@@ -5,16 +5,19 @@ import com.javarush.popelo.islandtask.character.Animal;
 
 public class Boa extends Animal implements Carnivorous {
 
-     {
-        eatProbability.put(Fox.class, 15);
-        eatProbability.put(Rabbit.class, 20);
-        eatProbability.put(Mouse.class, 40);
-        eatProbability.put(Duck.class, 10);
+    public Boa() {
+        eatProbability.put("Fox", 15);
+        eatProbability.put("Rabbit", 20);
+        eatProbability.put("Mouse", 40);
+        eatProbability.put("Duck", 10);
 
         weight = 15;
         maxCountOnLocation = 30;
         speed = 1;
         saturation = 3;
+
     }
 
 }
+
+

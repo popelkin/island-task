@@ -7,9 +7,9 @@ import com.javarush.popelo.islandtask.character.plant.Herb;
 
 public class Mouse extends Animal implements Herbivorous, Carnivorous {
 
-     {
-        eatProbability.put(Caterpillar.class, 90);
-        eatProbability.put(Herb.class, 100);
+    public Mouse() {
+        eatProbability.put("Caterpillar", 90);
+        eatProbability.put("Herb", 100);
 
         weight = 0.05;
         maxCountOnLocation = 500;

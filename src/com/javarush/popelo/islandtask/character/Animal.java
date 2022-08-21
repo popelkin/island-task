@@ -1,11 +1,8 @@
 package com.javarush.popelo.islandtask.character;
 
 import com.javarush.popelo.islandtask.behavior.*;
-import com.javarush.popelo.islandtask.exception.BaseException;
-import com.javarush.popelo.islandtask.island.Island;
 import com.javarush.popelo.islandtask.island.Location;
 import com.javarush.popelo.islandtask.service.CharacterService;
-import com.javarush.popelo.islandtask.service.LocationService;
 import com.javarush.popelo.islandtask.service.RandomizerService;
 
 import java.util.Arrays;
@@ -14,7 +11,7 @@ import java.util.Map;
 
 public abstract class Animal extends Character implements Move, Eat, Eatable, Multiply, Die {
 
-    protected Map<Class<? extends Character>, Integer> eatProbability = new HashMap<>();
+    protected Map<String, Integer> eatProbability = new HashMap<>();
 
     /**
      * @return boolean
