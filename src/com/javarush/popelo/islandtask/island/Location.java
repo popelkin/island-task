@@ -1,9 +1,9 @@
 package com.javarush.popelo.islandtask.island;
 
-import com.javarush.popelo.islandtask.behavior.Move;
 import com.javarush.popelo.islandtask.character.Animal;
 import com.javarush.popelo.islandtask.character.Character;
 import com.javarush.popelo.islandtask.character.Plant;
+import com.javarush.popelo.islandtask.exception.BaseException;
 import com.javarush.popelo.islandtask.service.RandomizerService;
 
 import java.util.*;
@@ -51,7 +51,7 @@ public class Location {
             Animal tmp = createCharacterInstance(v);
             int maxCount = tmp.getMaxCountOnLocation();
             int count = RandomizerService.getRandomInt(maxCount);
-            String animalClassName = tmp.getClass().getSimpleName();
+            String animalClassName = tmp.getName();
 
             if (!animalsMap.containsKey(animalClassName)) {
                 animalsMap.put(animalClassName, new ArrayList<>());
@@ -75,7 +75,7 @@ public class Location {
             Plant tmp = createCharacterInstance(v);
             int maxCount = tmp.getMaxCountOnLocation();
             int count = RandomizerService.getRandomInt(maxCount);
-            String plantClassName = tmp.getClass().getSimpleName();
+            String plantClassName = tmp.getName();
 
             if (!plantsMap.containsKey(plantClassName)) {
                 plantsMap.put(plantClassName, new ArrayList<>());
@@ -102,11 +102,16 @@ public class Location {
             return clazz.getDeclaredConstructor().newInstance();
 
         } catch (Exception ex) {
-            throw new RuntimeException("Exception: " + ex.getMessage());
+            throw new BaseException("Exception: " + ex.getMessage());
         }
     }
 
     public Map<String, Map<String, ArrayList>> getCharacters() {
         return characters;
     }
+
+    public int[] getCoordinates() {
+        return new int[]{this.x, this.y};
+    }
+
 }

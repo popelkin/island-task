@@ -54,6 +54,11 @@ public abstract class Character {
         return saturation;
     }
 
+    public String getName() {
+        return this.getClass().getSimpleName();
+    }
+
+
     @Override
     public String toString() {
         return "Character{" +

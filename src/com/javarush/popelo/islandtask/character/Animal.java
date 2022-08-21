@@ -8,6 +8,7 @@ import com.javarush.popelo.islandtask.service.CharacterService;
 import com.javarush.popelo.islandtask.service.LocationService;
 import com.javarush.popelo.islandtask.service.RandomizerService;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,23 +46,24 @@ public abstract class Animal extends Character implements Move, Eat, Eatable, Mu
     public void performMove() {
         int maxSpeed = this.getSpeed();
         int speed = RandomizerService.getRandomInt(maxSpeed);
+        int[] oldCoordinates = this.getLocation().getCoordinates();
+        Location newLocation = this.getLocation();
 
         for (int i = 1; i <= speed; i++) {
-            Location newLocation = CharacterService.getNewRandomLocation(this);
+            newLocation = CharacterService.getNewRandomLocation(this);
 
-            try {
-                this.move(newLocation);
-
-            } catch (BaseException ex) {
-                System.out.println("Can't move to destination location, reason: " + ex.getMessage());
-            }
+            this.move(newLocation);
         }
-        /*
-        1. move times
-        2. new coordinates
-        3. move
-        4. population count
-         */
+
+        int[] newCoordinates = newLocation.getCoordinates();
+
+        if (!Arrays.equals(oldCoordinates, newCoordinates)) {
+            System.out.println(this.getName() + " changed location from " + Arrays.toString(oldCoordinates) + " -> "
+                    + Arrays.toString(newCoordinates));
+
+        } else {
+            System.out.println(this.getName() + " left on the same location");
+        }
     }
 
     @Override

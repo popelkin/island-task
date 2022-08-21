@@ -7,6 +7,7 @@ import com.javarush.popelo.islandtask.island.Island;
 import com.javarush.popelo.islandtask.island.Location;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -26,14 +27,18 @@ public class CharacterService {
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 Location location = locations[x][y];
-                Map<String, Map<String, ArrayList>> characters = location.getCharacters();
 
-                characters.forEach((k, v) -> v.forEach((k2, v2) -> {
-                    for (Iterator<Character> iterator = v2.iterator(); iterator.hasNext();) {
-                        Character character = iterator.next();
+                location.getCharacters().forEach((k, v) -> v.forEach((k2, v2) -> {
+                    for (int i = 0; i < v.size(); i++) {
+                        try {
+                            Character character = (Character) v2.get(i);
 
-                        if (character instanceof Move) {
-                            ((Move) character).performMove();
+                            if (character instanceof Move) {
+                                ((Move) character).performMove();
+                            }
+
+                        } catch (Exception ex) {
+
                         }
                     }
                 }));
@@ -67,8 +72,8 @@ public class CharacterService {
         int count = getCharacterCountOnLocation(character, destination);
 
         if (count >= maxCountOnLocation) {
-            throw new BaseException("Only " + maxCountOnLocation + " of " + character.getClass().getSimpleName()
-                    + " is allowed on location");
+            throw new BaseException("Only " + maxCountOnLocation + " of " + character.getName()
+                    + " max allowed on location");
         }
 
         return true;
@@ -76,13 +81,19 @@ public class CharacterService {
 
     public static int getCharacterCountOnLocation(Character character, Location location) {
         String type = character.getClass().getSuperclass().getSimpleName();
-        String className = character.getClass().getSimpleName();
+        String className = character.getName();
 
         return location.getCharacters().get(type).get(className).size();
     }
 
     public static boolean changeCharacterLocation(Character character, Location location) {
-        canMoveToLocation(character, location);
+        try {
+            canMoveToLocation(character, location);
+
+        } catch (BaseException ex) {
+            System.out.println(character.getName() + " couldn't move between locations: " + Arrays.toString(character.getLocation().getCoordinates())
+                    + " -> " + Arrays.toString(location.getCoordinates()) +  ", reason: " + ex.getMessage());
+        }
 
         if (addCharacterToLocation(character, location)) {
             character.setLocation(location);
@@ -96,7 +107,7 @@ public class CharacterService {
 
     public static boolean removeCharacterFromLocation(Character character) {
         String type = character.getClass().getSuperclass().getSimpleName();
-        String className = character.getClass().getSimpleName();
+        String className = character.getName();
         Location location = character.getLocation();
 
         return location.getCharacters().get(type).get(className).remove(character);
@@ -104,7 +115,7 @@ public class CharacterService {
 
     public static boolean addCharacterToLocation(Character character, Location location) {
         String type = character.getClass().getSuperclass().getSimpleName();
-        String className = character.getClass().getSimpleName();
+        String className = character.getName();
 
         return location.getCharacters().get(type).get(className).add(character);
     }
