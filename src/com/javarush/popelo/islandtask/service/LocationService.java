@@ -1,16 +1,18 @@
 package com.javarush.popelo.islandtask.service;
 
+import com.javarush.popelo.islandtask.character.Character;
 import com.javarush.popelo.islandtask.island.Island;
 import com.javarush.popelo.islandtask.island.Location;
 
 import java.util.Arrays;
+import java.util.Map;
 
 public class LocationService {
 
     public static Location createLocation(Island island, int x, int y) {
         Location location = new Location(island, x, y);
         location.createCharacters();
-        location.getStatistic();
+        location.initStatistic();
 
         return location;
     }
@@ -31,7 +33,7 @@ public class LocationService {
         }
     }
 
-    public static String getStatistic(Location location) {
+    public static String getLocationStatistic(Location location) {
         StringBuilder data = new StringBuilder();
 
         data.append("Location " + Arrays.toString(location.getCoordinates()) + "\n");
@@ -48,5 +50,35 @@ public class LocationService {
 
         return data.toString();
     }
+
+    public static void updateLocationCharacterStatistic(Location location, Character character, String field, int value) {
+        Map<String, Integer> stat = getLocationCharacterStatistic(location, character);
+        int oldValue = stat.get(field);
+
+        stat.put(field, oldValue + value);
+
+        recountFinalQuantityLocationCharacter(location, character);
+    }
+
+    public static void setLocationCharacterStatistic(Location location, Character character, String field, int value) {
+        Map<String, Integer> stat = getLocationCharacterStatistic(location, character);
+        stat.put(field, value);
+    }
+
+    public static Map<String, Integer> getLocationCharacterStatistic(Location location, Character character) {
+        String type = character.getType();
+        String name = character.getName();
+
+        return location.getStatistic().get(type).get(name);
+    }
+
+    private static void recountFinalQuantityLocationCharacter(Location location, Character character) {
+        String type = character.getType();
+        String name = character.getName();
+        int quantity = location.getCharacters().get(type).get(name).size();
+
+        setLocationCharacterStatistic(location, character, Location.STATISTIC_FINAL_COUNT, quantity);
+    }
+
 
 }

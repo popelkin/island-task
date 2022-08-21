@@ -45,8 +45,8 @@ public class Island {
         CharacterService.performCharactersMove(this);
     }
 
-    public String getStatistic() {
-        return IslandService.getStatistic(this);
+    public void printStatistic() {
+        System.out.println(IslandService.getStatistic(this));
     }
 
 }

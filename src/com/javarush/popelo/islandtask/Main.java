@@ -8,10 +8,10 @@ public class Main {
         Island island = new Island(10,10);
 
         island.createLocations();
+
         island.performCharactersMove();
 
-        System.out.println(island.getStatistic());
-
+        island.printStatistic();
 
         System.out.println("Finish");
     }

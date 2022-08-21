@@ -58,6 +58,9 @@ public abstract class Character {
         return this.getClass().getSimpleName();
     }
 
+    public String getType() {
+        return this.getClass().getSuperclass().getSimpleName();
+    }
 
     @Override
     public String toString() {
@@ -69,4 +72,5 @@ public abstract class Character {
                 ", location=" + location +
                 '}';
     }
+
 }

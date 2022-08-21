@@ -91,11 +91,9 @@ public class Location {
         });
         characters.put("Plant", plantsMap);
         ///
-
-        initStatistic();
     }
 
-    private void initStatistic() {
+    public void initStatistic() {
         this.characters.forEach((type, list) -> {
             list.forEach((name, list2) -> {
                 if (!this.statistic.containsKey(type)) {
@@ -106,11 +104,14 @@ public class Location {
                     this.statistic.get(type).put(name, new HashMap<>(){{
                         put(STATISTIC_START_COUNT, list2.size());
                         put(STATISTIC_DIE, 0);
-                        put(STATISTIC_EAT, 0);
                         put(STATISTIC_ARRIVED, 0);
-                        put(STATISTIC_LEFT, 0);
-                        put(STATISTIC_MULTIPLY, 0);
-                        put(STATISTIC_FINAL_COUNT, 0);
+                        put(STATISTIC_FINAL_COUNT, list2.size());
+
+                        if (!type.equals(Plant.class.getSimpleName())) {
+                            put(STATISTIC_EAT, 0);
+                            put(STATISTIC_MULTIPLY, 0);
+                            put(STATISTIC_LEFT, 0);
+                        }
                     }});
                 }
             });
@@ -144,7 +145,7 @@ public class Location {
     }
 
     public String getStatistic(Location location) {
-        return LocationService.getStatistic(location);
+        return LocationService.getLocationStatistic(location);
     }
 
 }
