@@ -4,8 +4,7 @@ import com.javarush.popelo.islandtask.character.Animal;
 import com.javarush.popelo.islandtask.character.Character;
 import com.javarush.popelo.islandtask.character.Plant;
 import com.javarush.popelo.islandtask.exception.BaseException;
-import com.javarush.popelo.islandtask.service.LocationService;
-import com.javarush.popelo.islandtask.service.RandomizerService;
+import com.javarush.popelo.islandtask.service.*;
 
 import java.util.*;
 
@@ -47,11 +46,12 @@ public class Location {
         // create Animals
         Map<String, ArrayList> animalsMap = new HashMap<>();
         Set<Class<Animal>> animals = Character.getCharacterClasses(Character.ANIMAL_PACKAGE);
+        RandomizerService randomizerService = ServiceContainer.get("RandomizerService");
 
         animals.forEach(v -> {
             Animal tmp = createCharacterInstance(v);
             int maxCount = tmp.getMaxCountOnLocation();
-            int count = RandomizerService.getRandomInt(maxCount);
+            int count = randomizerService.getRandomInt(maxCount);
             String animalClassName = tmp.getName();
 
             if (!animalsMap.containsKey(animalClassName)) {
@@ -75,7 +75,7 @@ public class Location {
         plants.forEach(v -> {
             Plant tmp = createCharacterInstance(v);
             int maxCount = tmp.getMaxCountOnLocation();
-            int count = RandomizerService.getRandomInt(maxCount);
+            int count = randomizerService.getRandomInt(maxCount);
             String plantClassName = tmp.getName();
 
             if (!plantsMap.containsKey(plantClassName)) {
@@ -145,7 +145,8 @@ public class Location {
     }
 
     public String getStatistic(Location location) {
-        return LocationService.getLocationStatistic(location);
+        LocationService locationService = ServiceContainer.get("LocationService");
+        return locationService.getLocationStatistic(location);
     }
 
 }

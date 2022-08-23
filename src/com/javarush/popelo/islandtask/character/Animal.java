@@ -2,8 +2,7 @@ package com.javarush.popelo.islandtask.character;
 
 import com.javarush.popelo.islandtask.behavior.*;
 import com.javarush.popelo.islandtask.island.Location;
-import com.javarush.popelo.islandtask.service.CharacterService;
-import com.javarush.popelo.islandtask.service.RandomizerService;
+import com.javarush.popelo.islandtask.service.*;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -41,13 +40,15 @@ public abstract class Animal extends Character implements Move, Eat, Eatable, Mu
 
     @Override
     public void performMove() {
+        RandomizerService randomizerService = ServiceContainer.get("RandomizerService");
         int maxSpeed = this.getSpeed();
-        int speed = RandomizerService.getRandomInt(maxSpeed);
+        int speed = randomizerService.getRandomInt(maxSpeed);
         int[] oldCoordinates = this.getLocation().getCoordinates();
         Location newLocation = this.getLocation();
+        CharacterService characterService = ServiceContainer.get("CharacterService");
 
         for (int i = 1; i <= speed; i++) {
-            newLocation = CharacterService.getNewRandomLocation(this);
+            newLocation = characterService.getNewRandomLocation(this);
 
             this.move(newLocation);
         }
@@ -69,7 +70,9 @@ public abstract class Animal extends Character implements Move, Eat, Eatable, Mu
     }
 
     public boolean move(Location destination) {
-        return CharacterService.changeCharacterLocation(this, destination);
+        CharacterService characterService = ServiceContainer.get("CharacterService");
+
+        return characterService.changeCharacterLocation(this, destination);
     }
 
 

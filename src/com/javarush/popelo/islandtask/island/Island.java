@@ -1,9 +1,5 @@
 package com.javarush.popelo.islandtask.island;
 
-import com.javarush.popelo.islandtask.service.CharacterService;
-import com.javarush.popelo.islandtask.service.IslandService;
-import com.javarush.popelo.islandtask.service.LocationService;
-
 public class Island {
     private final int width;
     private final int height;
@@ -35,18 +31,6 @@ public class Island {
 
     public int getHeight() {
         return height;
-    }
-
-    public void createLocations() {
-        LocationService.createLocations(this);
-    }
-
-    public void performCharactersMove() {
-        CharacterService.performCharactersMove(this);
-    }
-
-    public void printStatistic() {
-        System.out.println(IslandService.getStatistic(this));
     }
 
 }

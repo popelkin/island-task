@@ -3,6 +3,9 @@ package com.javarush.popelo.islandtask.character;
 import com.javarush.popelo.islandtask.island.Island;
 import com.javarush.popelo.islandtask.island.Location;
 import com.javarush.popelo.islandtask.service.ClassService;
+import com.javarush.popelo.islandtask.service.ClassServiceImpl;
+import com.javarush.popelo.islandtask.service.RandomizerService;
+import com.javarush.popelo.islandtask.service.ServiceContainer;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -21,7 +24,9 @@ public abstract class Character {
      * @return Map
      */
     public static <T extends Character> Set<Class<T>> getCharacterClasses(String pack) {
-        return ClassService.getImplementedClasses(pack).stream()
+        ClassService classService = ServiceContainer.get("ClassService");
+
+        return classService.getImplementedClasses(pack).stream()
                 .map(e -> (Class<T>) e)
                 .collect(Collectors.toSet());
     }
