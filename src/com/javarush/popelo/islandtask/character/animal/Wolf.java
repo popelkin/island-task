@@ -19,7 +19,7 @@ public class Wolf extends Animal implements Carnivorous {
         weight = 50;
         maxCountOnLocation = 30;
         speed = 3;
-        saturation = 8;
+        maxSaturation = 8;
     }
 
 }

@@ -14,7 +14,7 @@ public class Fox extends Animal implements Carnivorous {
         weight = 8;
         maxCountOnLocation = 30;
         speed = 2;
-        saturation = 2;
+        maxSaturation = 2;
     }
 
 }

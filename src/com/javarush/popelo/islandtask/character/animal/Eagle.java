@@ -14,7 +14,7 @@ public class Eagle extends Animal implements Carnivorous {
         weight = 6;
         maxCountOnLocation = 20;
         speed = 3;
-        saturation = 1;
+        maxSaturation = 1;
     }
 
 }

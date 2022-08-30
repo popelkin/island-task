@@ -14,7 +14,7 @@ public class Boar extends Animal implements Herbivorous, Carnivorous {
         weight = 400;
         maxCountOnLocation = 50;
         speed = 2;
-        saturation = 50;
+        maxSaturation = 50;
     }
 
 }

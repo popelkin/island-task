@@ -16,13 +16,16 @@ public class RandomizerServiceImpl implements RandomizerService {
             throw new RuntimeException(e);
         }
     }
-    public int getRandomInt(int max) {
+    public int getRandom(int max) {
         return random.nextInt(max + 1);
     }
 
-    public int getRandomInt(int min, int max) {
+    public int getRandom(int min, int max) {
         max += 1;
         return random.nextInt(max - min) + min;
     }
 
+    public double getRandom(double min, double max) {
+        return min + (max - min) * random.nextDouble();
+    }
 }

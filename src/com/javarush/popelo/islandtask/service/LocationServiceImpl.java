@@ -11,6 +11,7 @@ public class LocationServiceImpl implements LocationService {
 
     public Location createLocation(Island island, int x, int y) {
         Location location = new Location(island, x, y);
+
         location.createCharacters();
         location.initStatistic();
 
@@ -77,7 +78,7 @@ public class LocationServiceImpl implements LocationService {
         String name = character.getName();
         int quantity = location.getCharacters().get(type).get(name).size();
 
-        setLocationCharacterStatistic(location, character, Location.STATISTIC_FINAL_COUNT, quantity);
+        setLocationCharacterStatistic(location, character, Location.LABEl_FINAL_COUNT, quantity);
     }
 
 

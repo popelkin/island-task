@@ -1,13 +1,15 @@
 package com.javarush.popelo.islandtask.service;
 
+import com.javarush.popelo.islandtask.behavior.Eat;
 import com.javarush.popelo.islandtask.behavior.Move;
+import com.javarush.popelo.islandtask.behavior.Multiply;
+import com.javarush.popelo.islandtask.character.Animal;
 import com.javarush.popelo.islandtask.character.Character;
 import com.javarush.popelo.islandtask.exception.BaseException;
 import com.javarush.popelo.islandtask.island.Island;
 import com.javarush.popelo.islandtask.island.Location;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class CharacterServiceImpl implements CharacterService {
     public void performCharactersMove(Island island) {
@@ -36,6 +38,58 @@ public class CharacterServiceImpl implements CharacterService {
         }
     }
 
+    public void performCharactersEat(Island island) {
+        int width = island.getWidth();
+        int height = island.getHeight();
+        Location[][] locations = island.getLocations();
+
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                Location location = locations[x][y];
+
+                location.getCharacters().forEach((k, v) -> v.forEach((k2, v2) -> {
+                    for (int i = 0; i < v.size(); i++) {
+                        try {
+                            Character character = (Character) v2.get(i);
+
+                            if (character instanceof Eat) {
+                                ((Eat) character).performEat();
+                            }
+
+                        } catch (Exception ex) {
+                        }
+                    }
+                }));
+            }
+        }
+    }
+
+    public void performCharactersMultiply(Island island) {
+        int width = island.getWidth();
+        int height = island.getHeight();
+        Location[][] locations = island.getLocations();
+
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                Location location = locations[x][y];
+
+                location.getCharacters().forEach((k, v) -> v.forEach((k2, v2) -> {
+                    for (int i = 0; i < v.size(); i++) {
+                        try {
+                            Character character = (Character) v2.get(i);
+
+                            if (character instanceof Multiply) {
+                                ((Multiply) character).performMultiply();
+                            }
+
+                        } catch (Exception ex) {
+                        }
+                    }
+                }));
+            }
+        }
+    }
+
     public Location getNewRandomLocation(Character character) {
         Island island = character.getIsland();
         Location location = character.getLocation();
@@ -54,8 +108,8 @@ public class CharacterServiceImpl implements CharacterService {
         newMinY = Math.max(newMinY, 0);
         newMaxY = Math.min(newMaxY, height - 1);
 
-        int x = randomizerService.getRandomInt(newMinX, newMaxX);
-        int y = randomizerService.getRandomInt(newMinY, newMaxY);
+        int x = randomizerService.getRandom(newMinX, newMaxX);
+        int y = randomizerService.getRandom(newMinY, newMaxY);
 
         return locationService.getLocationByCoordinates(island, x, y);
     }
@@ -68,7 +122,6 @@ public class CharacterServiceImpl implements CharacterService {
             throw new BaseException("Only " + maxCountOnLocation + " of " + character.getName()
                     + " max allowed on location");
         }
-
     }
 
     public int getCharacterCountOnLocation(Character character, Location location) {
@@ -101,6 +154,47 @@ public class CharacterServiceImpl implements CharacterService {
         return false;
     }
 
+    public Character getRandomVictim(Animal animal) {
+        RandomizerService randomizerService = ServiceContainer.get("RandomizerService");
+        Location location = animal.getLocation();
+        List<? extends Character> allVictimList = new ArrayList<>();
+
+        if (animal.isCarnivorous()) {
+            Map<String, ArrayList> victimList = getValidVictimListOnLocation(animal);
+
+            victimList.forEach((name, list) -> {
+                allVictimList.addAll(list);
+            });
+        }
+
+        if (animal.isHerbivorous()) {
+            location.getCharacters().get("Plant").forEach((name, list) -> {
+                allVictimList.addAll(list);
+            });
+        }
+
+        int random = randomizerService.getRandom(allVictimList.size());
+
+        return allVictimList.get(random);
+    }
+
+    public Map<String, ArrayList> getValidVictimListOnLocation(Animal animal) {
+        Location location = animal.getLocation();
+        Map<String, Map<String, ArrayList>> characters = location.getCharacters();
+        Map<String, ArrayList> animals = characters.get("Animal");
+        Map<String, Integer> victimList = animal.getEatProbability();
+        Set<String> animalNames = victimList.keySet();
+        Map<String, ArrayList> result = new HashMap<>();
+
+        animals.forEach((name, list) -> {
+            if (animalNames.contains(name)) {
+                result.put(name, list);
+            }
+        });
+
+        return result;
+    }
+
     public void removeCharacterFromLocation(Character character) {
         Location location = character.getLocation();
         List<Character> list = getCharacterList(character, location);
@@ -109,10 +203,9 @@ public class CharacterServiceImpl implements CharacterService {
         if (list.remove(character)) {
             character.setLocation(null);
 
-            locationService.updateLocationCharacterStatistic(location, character, Location.STATISTIC_LEFT, 1);
+            locationService.updateLocationCharacterStatistic(location, character, Location.LABEL_LEFT, 1);
 
         }
-
     }
 
     public void addCharacterToLocation(Character character, Location location) {
@@ -122,10 +215,22 @@ public class CharacterServiceImpl implements CharacterService {
         if (list.add(character)) {
             character.setLocation(location);
 
-            locationService.updateLocationCharacterStatistic(location, character, Location.STATISTIC_ARRIVED, 1);
-
+            locationService.updateLocationCharacterStatistic(location, character, Location.LABEL_ARRIVED, 1);
         }
+    }
 
+    /**
+     * @param clazz
+     * @return
+     * @param <T>
+     */
+    public <T> T createCharacterInstance(Class<T> clazz) {
+        try {
+            return clazz.getDeclaredConstructor().newInstance();
+
+        } catch (Exception ex) {
+            throw new BaseException("Exception: " + ex.getMessage());
+        }
     }
 
 }

@@ -14,7 +14,7 @@ public class Boa extends Animal implements Carnivorous {
         weight = 15;
         maxCountOnLocation = 30;
         speed = 1;
-        saturation = 3;
+        maxSaturation = 3;
 
     }
 

@@ -2,7 +2,6 @@ package com.javarush.popelo.islandtask.character.animal;
 
 import com.javarush.popelo.islandtask.behavior.Herbivorous;
 import com.javarush.popelo.islandtask.character.Animal;
-import com.javarush.popelo.islandtask.character.plant.Herb;
 
 public class Deer extends Animal implements Herbivorous {
 
@@ -12,7 +11,7 @@ public class Deer extends Animal implements Herbivorous {
         weight = 300;
         maxCountOnLocation = 20;
         speed = 4;
-        saturation = 50;
+        maxSaturation = 50;
     }
 
 }

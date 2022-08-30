@@ -14,15 +14,19 @@ public class Main {
             new RandomizerServiceImpl()
         );
 
+        IslandService islandService = ServiceContainer.get("IslandService");
         LocationService locationService = ServiceContainer.get("LocationService");
         CharacterService characterService = ServiceContainer.get("CharacterService");
-        IslandService islandService = ServiceContainer.get("IslandService");
 
         Island island = new Island(10, 10);
 
         locationService.createLocations(island);
 
+        characterService.performCharactersEat(island);
+
         characterService.performCharactersMove(island);
+
+        characterService.performCharactersMultiply(island);
 
         System.out.println(islandService.getStatistic(island));
 

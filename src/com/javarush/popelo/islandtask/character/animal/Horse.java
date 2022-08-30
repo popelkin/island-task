@@ -11,7 +11,7 @@ public class Horse extends Animal implements Herbivorous {
         weight = 400;
         maxCountOnLocation = 20;
         speed = 4;
-        saturation = 60;
+        maxSaturation = 60;
     }
 
 }

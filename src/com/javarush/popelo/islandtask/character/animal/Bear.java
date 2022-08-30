@@ -20,7 +20,7 @@ public class Bear extends Animal implements Carnivorous {
         weight = 500;
         maxCountOnLocation = 5;
         speed = 2;
-        saturation = 80;
+        maxSaturation = 80;
     }
 
 }
