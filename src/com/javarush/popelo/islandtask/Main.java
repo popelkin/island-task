@@ -19,14 +19,13 @@ public class Main {
         CharacterService characterService = ServiceContainer.get("CharacterService");
 
         Island island = new Island(10, 10);
-
         locationService.createLocations(island);
 
         characterService.performCharactersEat(island);
 
         characterService.performCharactersMove(island);
 
-        characterService.performCharactersMultiply(island);
+        //characterService.performCharactersMultiply(island);
 
         System.out.println(islandService.getStatistic(island));
 

@@ -4,9 +4,7 @@ import com.javarush.popelo.islandtask.island.Island;
 import com.javarush.popelo.islandtask.island.Location;
 import com.javarush.popelo.islandtask.service.ClassService;
 import com.javarush.popelo.islandtask.service.ServiceContainer;
-
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public abstract class Character {
@@ -65,6 +63,14 @@ public abstract class Character {
 
     public String getType() {
         return this.getClass().getSuperclass().getSimpleName();
+    }
+
+    public double getSaturation() {
+        return saturation;
+    }
+
+    public void setSaturation(double saturation) {
+        this.saturation = saturation;
     }
 
 }

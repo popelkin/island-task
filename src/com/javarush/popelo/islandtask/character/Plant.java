@@ -36,6 +36,7 @@ public abstract class Plant extends Character implements Multiply {
         Plant plant = characterService.createCharacterInstance(proto);
 
         characterService.addCharacterToLocation(plant, location);
+
     }
 
 }

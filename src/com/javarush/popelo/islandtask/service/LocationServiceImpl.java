@@ -5,6 +5,7 @@ import com.javarush.popelo.islandtask.island.Island;
 import com.javarush.popelo.islandtask.island.Location;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 public class LocationServiceImpl implements LocationService {
@@ -74,11 +75,10 @@ public class LocationServiceImpl implements LocationService {
     }
 
     public void recountFinalQuantityLocationCharacter(Location location, Character character) {
-        String type = character.getType();
-        String name = character.getName();
-        int quantity = location.getCharacters().get(type).get(name).size();
+        CharacterService characterService = ServiceContainer.get("CharacterService");
+        List<Character> list = characterService.getCharacterList(character, location);
 
-        setLocationCharacterStatistic(location, character, Location.LABEl_FINAL_COUNT, quantity);
+        setLocationCharacterStatistic(location, character, Location.LABEL_FINAL_COUNT, list.size());
     }
 
 

@@ -57,6 +57,7 @@ public class CharacterServiceImpl implements CharacterService {
                             }
 
                         } catch (Exception ex) {
+                            /*System.out.println(ex.getMessage());*/
                         }
                     }
                 }));
@@ -115,6 +116,12 @@ public class CharacterServiceImpl implements CharacterService {
     }
 
     public void validateMoveToLocation(Character character, Location destination) {
+        Location location = character.getLocation();
+
+        if (location == destination) {
+            throw new BaseException("Location is the same");
+        }
+
         int maxCountOnLocation = character.getMaxCountOnLocation();
         int count = getCharacterCountOnLocation(character, destination);
 
@@ -138,17 +145,83 @@ public class CharacterServiceImpl implements CharacterService {
     }
 
     public boolean changeCharacterLocation(Character character, Location location) {
+        LocationService locationService = ServiceContainer.get("LocationService");
+        Location oldLocation = character.getLocation();
+
         try {
             validateMoveToLocation(character, location);
 
             removeCharacterFromLocation(character);
+            locationService.updateLocationCharacterStatistic(oldLocation, character, Location.LABEL_LEFT, 1);
+
             addCharacterToLocation(character, location);
+            locationService.updateLocationCharacterStatistic(location, character, Location.LABEL_ARRIVED, 1);
 
             return true;
 
         } catch (BaseException ex) {
-            System.out.println(character.getName() + " couldn't move between locations: " + Arrays.toString(character.getLocation().getCoordinates())
-                    + " -> " + Arrays.toString(location.getCoordinates()) +  ", reason: " + ex.getMessage());
+            /*System.out.println(character.getName() + " couldn't move between locations: " + Arrays.toString(character.getLocation().getCoordinates())
+                    + " -> " + Arrays.toString(location.getCoordinates()) +  ", reason: " + ex.getMessage());*/
+        }
+
+        return false;
+    }
+
+    public boolean eatCharacter(Character character, Character victim) {
+        LocationService locationService = ServiceContainer.get("LocationService");
+        Location location = character.getLocation();
+
+        try {
+            dieCharacter(victim);
+
+            updateCharacterSaturation(character, victim.getWeight());
+
+            locationService.updateLocationCharacterStatistic(location, character, Location.LABEL_EAT, 1);
+
+            return true;
+
+        } catch (BaseException ex) {
+            System.out.println(character.getName() + " couldn't eat character on location: " + Arrays.toString(character.getLocation().getCoordinates())
+                    + ", reason: " + ex.getMessage());
+        }
+
+        return false;
+    }
+
+    public void eatCharacterFailed(Character character) {
+        updateCharacterSaturation(character, -(character.getMaxSaturation() / 5));
+    }
+
+    public void updateCharacterSaturation(Character character, double value) {
+        double saturation = character.getSaturation();
+        double newSaturation = saturation + value;
+
+        if (newSaturation <= 0) {
+            dieCharacter(character);
+
+        } else {
+            if (newSaturation > character.getMaxSaturation()) {
+                newSaturation = character.getMaxSaturation();
+            }
+
+            character.setSaturation(newSaturation);
+        }
+    }
+
+    public boolean dieCharacter(Character character) {
+        LocationService locationService = ServiceContainer.get("LocationService");
+        Location location = character.getLocation();
+
+        try {
+            removeCharacterFromLocation(character);
+
+            locationService.updateLocationCharacterStatistic(location, character, Location.LABEL_DIE, 1);
+
+            return true;
+
+        } catch (BaseException ex) {
+            System.out.println(character.getName() + " couldn't die character on location: " + Arrays.toString(character.getLocation().getCoordinates())
+                    + ", reason: " + ex.getMessage());
         }
 
         return false;
@@ -162,15 +235,11 @@ public class CharacterServiceImpl implements CharacterService {
         if (animal.isCarnivorous()) {
             Map<String, ArrayList> victimList = getValidVictimListOnLocation(animal);
 
-            victimList.forEach((name, list) -> {
-                allVictimList.addAll(list);
-            });
+            victimList.forEach((name, list) -> allVictimList.addAll(list));
         }
 
         if (animal.isHerbivorous()) {
-            location.getCharacters().get("Plant").forEach((name, list) -> {
-                allVictimList.addAll(list);
-            });
+            location.getCharacters().get("Plant").forEach((name, list) -> allVictimList.addAll(list));
         }
 
         int random = randomizerService.getRandom(allVictimList.size());
@@ -198,25 +267,16 @@ public class CharacterServiceImpl implements CharacterService {
     public void removeCharacterFromLocation(Character character) {
         Location location = character.getLocation();
         List<Character> list = getCharacterList(character, location);
-        LocationService locationService = ServiceContainer.get("LocationService");
 
-        if (list.remove(character)) {
-            character.setLocation(null);
-
-            locationService.updateLocationCharacterStatistic(location, character, Location.LABEL_LEFT, 1);
-
-        }
+        list.remove(character);
+        character.setLocation(null);
     }
 
     public void addCharacterToLocation(Character character, Location location) {
         List<Character> list = getCharacterList(character, location);
-        LocationService locationService = ServiceContainer.get("LocationService");
 
-        if (list.add(character)) {
-            character.setLocation(location);
-
-            locationService.updateLocationCharacterStatistic(location, character, Location.LABEL_ARRIVED, 1);
-        }
+        list.add(character);
+        character.setLocation(location);
     }
 
     /**
@@ -231,6 +291,25 @@ public class CharacterServiceImpl implements CharacterService {
         } catch (Exception ex) {
             throw new BaseException("Exception: " + ex.getMessage());
         }
+    }
+
+    public boolean multiplyCharacter(Character character) {
+        LocationService locationService = ServiceContainer.get("LocationService");
+        Location location = character.getLocation();
+
+        try {
+            removeCharacterFromLocation(character);
+
+            locationService.updateLocationCharacterStatistic(location, character, Location.LABEL_MULTIPLY, 1);
+
+            return true;
+
+        } catch (BaseException ex) {
+            System.out.println(character.getName() + " couldn't die character on location: " + Arrays.toString(character.getLocation().getCoordinates())
+                    + ", reason: " + ex.getMessage());
+        }
+
+        return false;
     }
 
 }

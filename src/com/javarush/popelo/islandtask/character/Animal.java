@@ -1,11 +1,9 @@
 package com.javarush.popelo.islandtask.character;
 
 import com.javarush.popelo.islandtask.behavior.*;
-import com.javarush.popelo.islandtask.exception.BaseException;
 import com.javarush.popelo.islandtask.island.Location;
 import com.javarush.popelo.islandtask.service.*;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,7 +21,7 @@ public abstract class Animal extends Character implements Move, Eat, Multiply, D
 
     @Override
     public void performDie() {
-        System.out.println("Died");
+
     }
 
     public Map<String, Integer> getEatProbability() {
@@ -32,6 +30,41 @@ public abstract class Animal extends Character implements Move, Eat, Multiply, D
 
     @Override
     public void performEat() {
+        CharacterService characterService = ServiceContainer.get("CharacterService");
+        RandomizerService randomizerService = ServiceContainer.get("RandomizerService");
+        int huntTries = randomizerService.getRandom(1, 10);
+
+        while (this.saturation < this.maxSaturation && huntTries-- > 0) {
+            Character victim = characterService.getRandomVictim(this);
+
+            int percent = this.getEatProbability().get(victim.getName());
+            int random = randomizerService.getRandom(100);
+
+            if (random > percent) {
+                characterService.eatCharacterFailed(this);
+                continue;
+            }
+
+            characterService.eatCharacter(this, victim);
+        }
+    }
+
+    @Override
+    public void performMove() {
+        CharacterService characterService = ServiceContainer.get("CharacterService");
+        RandomizerService randomizerService = ServiceContainer.get("RandomizerService");
+        int maxSpeed = this.getSpeed();
+        int speed = randomizerService.getRandom(maxSpeed);
+
+        for (int i = 1; i <= speed; i++) {
+            Location newLocation = characterService.getNewRandomLocation(this);
+
+            characterService.changeCharacterLocation(this, newLocation);
+        }
+    }
+
+    @Override
+    public void performMultiply() {
         CharacterService characterService = ServiceContainer.get("CharacterService");
         RandomizerService randomizerService = ServiceContainer.get("RandomizerService");
         int huntTries = randomizerService.getRandom(1, 3);
@@ -46,50 +79,8 @@ public abstract class Animal extends Character implements Move, Eat, Multiply, D
                 continue;
             }
 
-            this.eat(character);
+            characterService.multiplyCharacter(this);
         }
     }
-
-    private void eat(Character character) {
-        System.out.println(character);
-    }
-
-    @Override
-    public void performMove() {
-        CharacterService characterService = ServiceContainer.get("CharacterService");
-        RandomizerService randomizerService = ServiceContainer.get("RandomizerService");
-        int maxSpeed = this.getSpeed();
-        int speed = randomizerService.getRandom(maxSpeed);
-        int[] oldCoordinates = this.getLocation().getCoordinates();
-        Location newLocation = this.getLocation();
-
-        for (int i = 1; i <= speed; i++) {
-            newLocation = characterService.getNewRandomLocation(this);
-
-            this.move(newLocation);
-        }
-
-        int[] newCoordinates = newLocation.getCoordinates();
-
-        if (!Arrays.equals(oldCoordinates, newCoordinates)) {
-            System.out.println(this.getName() + " changed location from " + Arrays.toString(oldCoordinates) + " -> "
-                    + Arrays.toString(newCoordinates));
-
-        } else {
-            System.out.println(this.getName() + " left on the same location");
-        }
-    }
-
-    @Override
-    public void performMultiply() {
-        System.out.println("Multiply");
-    }
-
-    private boolean move(Location destination) {
-        CharacterService characterService = ServiceContainer.get("CharacterService");
-
-        return characterService.changeCharacterLocation(this, destination);
-    }
-
 
 }
