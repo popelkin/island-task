@@ -19,5 +19,3 @@ public class Boa extends Animal implements Carnivorous {
     }
 
 }
-
-

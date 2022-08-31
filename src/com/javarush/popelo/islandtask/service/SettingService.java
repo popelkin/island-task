@@ -16,6 +16,4 @@ public final class SettingService {
         return instance;
     }
 
-
-
 }
