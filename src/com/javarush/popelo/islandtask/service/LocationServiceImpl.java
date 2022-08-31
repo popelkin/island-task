@@ -3,7 +3,6 @@ package com.javarush.popelo.islandtask.service;
 import com.javarush.popelo.islandtask.character.Character;
 import com.javarush.popelo.islandtask.island.Island;
 import com.javarush.popelo.islandtask.island.Location;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;

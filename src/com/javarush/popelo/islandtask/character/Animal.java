@@ -3,11 +3,11 @@ package com.javarush.popelo.islandtask.character;
 import com.javarush.popelo.islandtask.behavior.*;
 import com.javarush.popelo.islandtask.island.Location;
 import com.javarush.popelo.islandtask.service.*;
-
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public abstract class Animal extends Character implements Move, Eat, Multiply, Die {
+public abstract class Animal extends Character implements Move, Eat, Multiply {
 
     protected Map<String, Integer> eatProbability = new HashMap<>();
 
@@ -17,11 +17,6 @@ public abstract class Animal extends Character implements Move, Eat, Multiply, D
 
     public boolean isCarnivorous() {
         return this instanceof Carnivorous;
-    }
-
-    @Override
-    public void performDie() {
-
     }
 
     public Map<String, Integer> getEatProbability() {
@@ -62,25 +57,33 @@ public abstract class Animal extends Character implements Move, Eat, Multiply, D
             characterService.changeCharacterLocation(this, newLocation);
         }
     }
-
     @Override
     public void performMultiply() {
-        CharacterService characterService = ServiceContainer.get("CharacterService");
         RandomizerService randomizerService = ServiceContainer.get("RandomizerService");
-        int huntTries = randomizerService.getRandom(1, 3);
+        CharacterService characterService = ServiceContainer.get("CharacterService");
+        List<Character> characters = characterService.getCharacterList(this, getLocation());
 
-        while (this.saturation < this.maxSaturation && huntTries-- > 0) {
-            Character character = characterService.getRandomVictim(this);
+        if (characters.size() < this.maxCountOnLocation) {
+            int count = randomizerService.getRandom(this.maxCountOnLocation - characters.size());
 
-            int percent = this.getEatProbability().get(character.getName());
-            int random = randomizerService.getRandom(100);
-
-            if (random > percent) {
-                continue;
+            for (int i = 0; i < count; i++) {
+                this.multiply();
             }
-
-            characterService.multiplyCharacter(this);
         }
+    }
+
+    private void multiply() {
+        CharacterService characterService = ServiceContainer.get("CharacterService");
+        LocationService locationService = ServiceContainer.get("LocationService");
+        Location location = this.getLocation();
+        String name = this.getName();
+        Map<String, Class<Animal>> animalsPackage = Character.getCharacterClasses(Character.ANIMAL_PACKAGE);
+        Class<Animal> proto = animalsPackage.get(name);
+
+        Animal animal = characterService.createCharacterInstance(proto);
+
+        characterService.addCharacterToLocation(animal, location);
+        locationService.updateLocationCharacterStatistic(location, animal, Location.LABEL_MULTIPLY, 1);
     }
 
 }

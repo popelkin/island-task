@@ -4,21 +4,21 @@ import com.javarush.popelo.islandtask.island.Island;
 import com.javarush.popelo.islandtask.island.Location;
 
 public class IslandServiceImpl implements IslandService {
-
-    public String getStatistic(Island island) {
+    public void printStatistic(Island island) {
         int width = island.getWidth();
         int height = island.getHeight();
         Location[][] locations = island.getLocations();
         StringBuilder data = new StringBuilder();
+        LocationService locationService = ServiceContainer.get("LocationService");
 
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 Location location = locations[x][y];
 
-                data.append(location.getStatistic(location));
+                data.append(locationService.getLocationStatistic(location));
             }
         }
 
-        return data.toString();
+        System.out.println(data);
     }
 }

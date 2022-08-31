@@ -22,13 +22,9 @@ public class Main {
         locationService.createLocations(island);
 
         characterService.performCharactersEat(island);
-
         characterService.performCharactersMove(island);
+        characterService.performCharactersMultiply(island);
 
-        //characterService.performCharactersMultiply(island);
-
-        System.out.println(islandService.getStatistic(island));
-
-        System.out.println("Finish");
+        islandService.printStatistic(island);
     }
 }

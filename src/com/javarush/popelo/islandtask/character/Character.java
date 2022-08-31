@@ -1,22 +1,24 @@
 package com.javarush.popelo.islandtask.character;
 
+import com.javarush.popelo.islandtask.behavior.Die;
 import com.javarush.popelo.islandtask.island.Island;
 import com.javarush.popelo.islandtask.island.Location;
+import com.javarush.popelo.islandtask.service.CharacterService;
 import com.javarush.popelo.islandtask.service.ClassService;
 import com.javarush.popelo.islandtask.service.ServiceContainer;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public abstract class Character {
+public abstract class Character implements Die {
+    public static final String ANIMAL_PACKAGE = "com.javarush.popelo.islandtask.character.animal";
+    public static final String PLANT_PACKAGE = "com.javarush.popelo.islandtask.character.plant";
+
     protected double weight;
     protected int maxCountOnLocation;
     protected int speed;
     protected double maxSaturation;
     protected double saturation = 0;
     private Location location;
-
-    public static final String ANIMAL_PACKAGE = "com.javarush.popelo.islandtask.character.animal";
-    public static final String PLANT_PACKAGE = "com.javarush.popelo.islandtask.character.plant";
 
     /**
      * @return Map
@@ -71,6 +73,12 @@ public abstract class Character {
 
     public void setSaturation(double saturation) {
         this.saturation = saturation;
+    }
+
+    public void performDie() {
+        CharacterService characterService = ServiceContainer.get("CharacterService");
+
+        characterService.dieCharacter(this);
     }
 
 }

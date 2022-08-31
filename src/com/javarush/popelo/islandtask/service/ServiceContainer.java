@@ -8,7 +8,6 @@ public class ServiceContainer {
     private static final Map<String, Service> services = new HashMap<>();
 
     private ServiceContainer() {
-
     }
 
     public static void set(Service... service) {

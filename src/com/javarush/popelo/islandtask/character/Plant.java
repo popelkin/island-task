@@ -3,14 +3,13 @@ package com.javarush.popelo.islandtask.character;
 import com.javarush.popelo.islandtask.behavior.Multiply;
 import com.javarush.popelo.islandtask.island.Location;
 import com.javarush.popelo.islandtask.service.CharacterService;
+import com.javarush.popelo.islandtask.service.LocationService;
 import com.javarush.popelo.islandtask.service.RandomizerService;
 import com.javarush.popelo.islandtask.service.ServiceContainer;
-
 import java.util.List;
 import java.util.Map;
 
 public abstract class Plant extends Character implements Multiply {
-
     @Override
     public void performMultiply() {
         RandomizerService randomizerService = ServiceContainer.get("RandomizerService");
@@ -28,6 +27,7 @@ public abstract class Plant extends Character implements Multiply {
 
     private void multiply() {
         CharacterService characterService = ServiceContainer.get("CharacterService");
+        LocationService locationService = ServiceContainer.get("LocationService");
         Location location = this.getLocation();
         String name = this.getName();
         Map<String, Class<Plant>> plantsPackage = Character.getCharacterClasses(Character.PLANT_PACKAGE);
@@ -36,7 +36,7 @@ public abstract class Plant extends Character implements Multiply {
         Plant plant = characterService.createCharacterInstance(proto);
 
         characterService.addCharacterToLocation(plant, location);
-
+        locationService.updateLocationCharacterStatistic(location, plant, Location.LABEL_MULTIPLY, 1);
     }
 
 }

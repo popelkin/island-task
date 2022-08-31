@@ -3,7 +3,6 @@ package com.javarush.popelo.islandtask.island;
 public class Island {
     private final int width;
     private final int height;
-
     private Location[][] locations;
 
     /**
@@ -19,10 +18,6 @@ public class Island {
 
     public Location[][] getLocations() {
         return locations;
-    }
-
-    public void setLocations(Location[][] locations) {
-        this.locations = locations;
     }
 
     public int getWidth() {

@@ -4,6 +4,6 @@ import com.javarush.popelo.islandtask.island.Island;
 
 public interface IslandService extends Service {
 
-    String getStatistic(Island island);
+    void printStatistic(Island island);
 
 }

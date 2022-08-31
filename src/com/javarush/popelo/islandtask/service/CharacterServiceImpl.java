@@ -8,10 +8,10 @@ import com.javarush.popelo.islandtask.character.Character;
 import com.javarush.popelo.islandtask.exception.BaseException;
 import com.javarush.popelo.islandtask.island.Island;
 import com.javarush.popelo.islandtask.island.Location;
-
 import java.util.*;
 
 public class CharacterServiceImpl implements CharacterService {
+
     public void performCharactersMove(Island island) {
         int width = island.getWidth();
         int height = island.getHeight();
@@ -57,7 +57,6 @@ public class CharacterServiceImpl implements CharacterService {
                             }
 
                         } catch (Exception ex) {
-                            /*System.out.println(ex.getMessage());*/
                         }
                     }
                 }));
@@ -172,7 +171,7 @@ public class CharacterServiceImpl implements CharacterService {
         Location location = character.getLocation();
 
         try {
-            dieCharacter(victim);
+            victim.performDie();
 
             updateCharacterSaturation(character, victim.getWeight());
 
@@ -197,7 +196,7 @@ public class CharacterServiceImpl implements CharacterService {
         double newSaturation = saturation + value;
 
         if (newSaturation <= 0) {
-            dieCharacter(character);
+            character.performDie();
 
         } else {
             if (newSaturation > character.getMaxSaturation()) {
